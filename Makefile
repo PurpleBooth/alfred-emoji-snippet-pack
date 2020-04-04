@@ -29,6 +29,11 @@ build/Emoji.alfredsnippets: build/json
 ## Build the Emoji Pack
 build: build/Emoji.alfredsnippets
 
+.PHONY: test
+## Test it was built ok
+test: build/Emoji.alfredsnippets
+	bin/test
+
 .PHONY: clean
 ## Clean the build directory
 clean:

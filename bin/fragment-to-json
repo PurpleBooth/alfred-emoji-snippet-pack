@@ -4,7 +4,6 @@ set -euo pipefail
 
 FRAGMENT="$1"
 
-
 UUID="$(uuidgen)"
 EMOJI="$(hxselect -s '' -c ".chars" <<<"$FRAGMENT")"
 RAW_NAME="$(hxselect -s '' -c ".name" <<<"$FRAGMENT")"
@@ -13,22 +12,22 @@ NAME="$EMOJI $KEYWORD"
 
 echoerr() { echo "$@" 1>&2; }
 
-if [ -z "$EMOJI" ] ; then
-  echoerr Emoji empty
-  exit 3
+if [ -z "$EMOJI" ]; then
+	echoerr Emoji empty
+	exit 3
 fi
 
-if [ -z "$RAW_NAME" ] ; then
-  echoerr Name empty
-  exit 2
+if [ -z "$RAW_NAME" ]; then
+	echoerr Name empty
+	exit 2
 fi
 
 OUTPUT_DIR="build/json"
 mkdir -p "$OUTPUT_DIR"
 echo "{}" | jq \
-  --arg emoji "$EMOJI" \
-  --arg name "$NAME" \
-  --arg keyword "$KEYWORD" \
-  --arg uuid "$UUID" \
-  '. + {alfredsnippet: { snippet: $emoji, uid: $uuid, name: $name, keyword: $keyword } }' > "$OUTPUT_DIR/$NAME $UUID.json"
+	--arg emoji "$EMOJI" \
+	--arg name "$NAME" \
+	--arg keyword "$KEYWORD" \
+	--arg uuid "$UUID" \
+	'. + {alfredsnippet: { snippet: $emoji, uid: $uuid, name: $name, keyword: $keyword } }' >"$OUTPUT_DIR/$NAME $UUID.json"
 echo "Snipped JSON for $NAME generated"

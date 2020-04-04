@@ -1,6 +1,6 @@
 # A snippet pack for alfred
 
-![icon][icon.png]
+![icon](icon.png)
 
 The existing snippet pack for alfred with Emoji in has +1300 emoji and
 this one has +1700. Generated from the full emoji list provided by
@@ -9,7 +9,8 @@ Unicode.
 See [releases for
 downloads](https://github.com/PurpleBooth/emoji-pack-generator/releases).
 
-![screenshot showing it imported][screenshot.png]
+
+![screenshot showing it imported](screenshot.png)
 
 It will rebuild every day, so it should continue to stay up to date as
 new Emojis are released, to get the latest version re-import the snipped

@@ -1,0 +1,21 @@
+on:
+  push: ~
+  schedule:
+    - cron:  '0 8 * * *'
+
+name: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          lfs: true
+      - run: sudo apt-get update
+      - run: sudo apt-get install curl bash zip html-xml-utils -y
+      - run: make build
+      - uses: actions/upload-artifact@master
+        with:
+          name: alfredsnippet-pack
+          path: ./build/Emoji.alfredsnippets
