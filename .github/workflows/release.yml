@@ -1,0 +1,50 @@
+
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron:  '0 8 * * *'
+
+name: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Upload Release Asset
+    steps:
+      - uses: actions/checkout@master
+      - run: sudo apt-get update
+      - run: sudo apt-get install curl bash zip html-xml-utils -y
+      - run: |
+          make build
+      - uses: actions/upload-artifact@master
+        with:
+          name: Emoji.alfredsnippets
+          path: ./build/Emoji.alfredsnippets
+  release:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ::set-output "name=action_build_date::$(date +%Y%m%d%H%M%S%N)"
+        id: build_date
+      - uses: actions/download-artifact@master
+        with:
+          name: Emoji.alfredsnippets
+      - id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.build_date.outputs.action_build_date }}
+          release_name: Release ${{ steps.build_date.outputs.action_build_date }}
+          draft: false
+          prerelease: false
+      - uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./Emoji.alfredsnippets
+          asset_name: Emoji.alfredsnippets
+          asset_content_type: application/zip
