@@ -4,16 +4,18 @@ require 'json'
 require 'gemoji'
 
 Emoji.all.each do |emoji|
-  snippet_name = "#{emoji.raw} \"#{emoji.name}\" #{emoji.description}"
+  emoji.aliases.each do |emoji_name|
+    snippet_name = "#{emoji.raw} \"#{emoji_name}\" #{emoji.description}"
 
-  snippet = {
-      alfredsnippet: {
-          snippet: emoji.raw,
-          uid: SecureRandom.uuid,
-          name: snippet_name,
-          keyword: ":#{emoji.name}:"
-      }
-  }
+    snippet = {
+        alfredsnippet: {
+            snippet: emoji.raw,
+            uid: SecureRandom.uuid,
+            name: snippet_name,
+            keyword: ":#{emoji_name}:"
+        }
+    }
 
-  File.write(File.join("build", "json", "#{emoji.name}-#{SecureRandom.uuid}.json"), JSON.generate(snippet))
+    File.write(File.join("build", "json", "#{emoji.name}-#{SecureRandom.uuid}.json"), JSON.generate(snippet))
+  end
 end
