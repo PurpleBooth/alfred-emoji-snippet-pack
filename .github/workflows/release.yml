@@ -15,8 +15,7 @@ jobs:
         with:
           lfs: true
       - uses: masa-iwasaki/setup-rbenv@v1
-      - name: Install Ruby
-        run: |
+      - run: |
           eval "$(rbenv init -)"
           rbenv install -s $(cat .ruby-version)
           bundle install --path vendor/bundle
