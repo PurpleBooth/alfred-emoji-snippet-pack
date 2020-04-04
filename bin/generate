@@ -5,8 +5,8 @@ require 'gemoji'
 
 Emoji.all.each do |emoji|
   snippet_name = "#{emoji.raw} "
+  snippet_name += "#{emoji.description} "
   snippet_name += emoji.aliases.map { |string| "\"#{string}\"" }.join(", ")
-  snippet_name += " #{emoji.description}"
   snippet_name += " (#{emoji.tags.join(", ")})" if emoji.tags.size > 0
 
   snippet = {
