@@ -1,18 +1,27 @@
 # A snippet pack for alfred
 
-The existing snippet pack for alfred with Emoji in has +1300 emoji and
-this one has +1700. Generated from the full emoji list provided by
-Unicode.
+![screenshot showing it imported](screenshot.png)
+
+Inspired by
+[califa/alfred-emoji-pack](https://github.com/califa/alfred-emoji-pack),
+
+Couple of things that are different though:
+
+  - Fully automated releases - As soon as the place we get our Emoji's
+    from updates, a new version will be built
+  - Less repeating emoji
+  - More descriptive names
+
+Mostly these are just personal taste and the original project was a
+great inspiration.
+
+## Installing
 
 See [releases for
 downloads](https://github.com/PurpleBooth/emoji-pack-generator/releases).
 
-
-![screenshot showing it imported](screenshot.png)
-
-It will rebuild every day, so it should continue to stay up to date as
-new Emojis are released, to get the latest version re-import the snipped
-pack.
+Download the latest one and run it. It'll open in Alfred and you can add
+it.
 
 ## License
 
