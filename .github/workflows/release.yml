@@ -14,9 +14,13 @@ jobs:
       - uses: actions/checkout@master
         with:
           lfs: true
-      - run: sudo apt-get update
-      - run: sudo apt-get install curl bash zip html-xml-utils -y
-      - run: make clean build test
+      - uses: masa-iwasaki/setup-rbenv@v1
+      - name: Install Ruby
+        run: |
+          eval "$(rbenv init -)"
+          rbenv install -s $(cat .ruby-version)
+          bundle install --path vendor/bundle
+          make clean build test
       - uses: actions/upload-artifact@master
         with:
           name: alfredsnippet-pack
