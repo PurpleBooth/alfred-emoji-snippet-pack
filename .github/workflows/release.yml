@@ -16,7 +16,7 @@ jobs:
           lfs: true
       - run: sudo apt-get update
       - run: sudo apt-get install curl bash zip html-xml-utils -y
-      - run: make build
+      - run: make clean build test
       - uses: actions/upload-artifact@master
         with:
           name: alfredsnippet-pack
