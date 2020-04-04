@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+require 'securerandom'
+require 'json'
+require 'gemoji'
+
+Emoji.all.each do |emoji|
+
+  snippet = {
+      alfredsnippet: {
+          snippet: emoji.raw,
+          uid: SecureRandom.uuid,
+          name: "#{emoji.raw} :#{emoji.name}:",
+          keyword: ":#{emoji.name}:"
+      }
+  }
+
+  File.write(File.join("build", "json", "#{emoji.name}-#{SecureRandom.uuid}.json"), JSON.generate(snippet))
+end
