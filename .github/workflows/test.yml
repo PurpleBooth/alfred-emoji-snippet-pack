@@ -12,8 +12,6 @@ jobs:
       - uses: actions/checkout@master
         with:
           lfs: true
-      - run: sudo apt-get update
-      - run: sudo apt-get install curl bash zip html-xml-utils -y
       - uses: masa-iwasaki/setup-rbenv@v1
       - run: |
           eval "$(rbenv init -)"
