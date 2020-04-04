@@ -1,7 +1,5 @@
 # A snippet pack for alfred
 
-![icon](icon.png)
-
 The existing snippet pack for alfred with Emoji in has +1300 emoji and
 this one has +1700. Generated from the full emoji list provided by
 Unicode.
