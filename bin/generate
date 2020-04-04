@@ -4,18 +4,19 @@ require 'json'
 require 'gemoji'
 
 Emoji.all.each do |emoji|
-  emoji.aliases.each do |emoji_name|
-    snippet_name = "#{emoji.raw} \"#{emoji_name}\" #{emoji.description}"
+  snippet_name = "#{emoji.raw} "
+  snippet_name += emoji.aliases.map { |string| "\"#{string}\"" }.join(", ")
+  snippet_name += " #{emoji.description}"
+  snippet_name += " (#{emoji.tags.join(", ")})" if emoji.tags.size > 0
 
-    snippet = {
-        alfredsnippet: {
-            snippet: emoji.raw,
-            uid: SecureRandom.uuid,
-            name: snippet_name,
-            keyword: ":#{emoji_name}:"
-        }
-    }
+  snippet = {
+      alfredsnippet: {
+          snippet: emoji.raw,
+          uid: SecureRandom.uuid,
+          name: snippet_name,
+          keyword: ":#{emoji.name}:"
+      }
+  }
 
-    File.write(File.join("build", "json", "#{emoji.name}-#{SecureRandom.uuid}.json"), JSON.generate(snippet))
-  end
+  File.write(File.join("build", "json", "#{emoji.name}-#{SecureRandom.uuid}.json"), JSON.generate(snippet))
 end
