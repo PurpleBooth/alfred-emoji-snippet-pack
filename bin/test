@@ -5,7 +5,7 @@ set -xeuo pipefail
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 rm -rf "$DIR/../build/test"
-mkdir -p "$DIR/..build/test"
+mkdir -p "$DIR/../build/test"
 unzip -l "$DIR/../build/Emoji.alfredsnippets" | grep --binary-files=text icon.png
 unzip -l "$DIR/../build/Emoji.alfredsnippets" | grep --binary-files=text -F json
 unzip "$DIR/../build/Emoji.alfredsnippets" -d build/test
