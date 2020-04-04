@@ -4,12 +4,13 @@ require 'json'
 require 'gemoji'
 
 Emoji.all.each do |emoji|
+  snippet_name = "#{emoji.raw} \"#{emoji.name}\" #{emoji.description}"
 
   snippet = {
       alfredsnippet: {
           snippet: emoji.raw,
           uid: SecureRandom.uuid,
-          name: "#{emoji.raw} :#{emoji.name}:",
+          name: snippet_name,
           keyword: ":#{emoji.name}:"
       }
   }
