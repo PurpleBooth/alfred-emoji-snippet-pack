@@ -2,8 +2,6 @@ on:
   push:
     branches:
       - master
-  schedule:
-    - cron:  '0 8 * * *'
 
 name: Release
 
@@ -38,8 +36,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.build_date.outputs.action_build_date }}
-          release_name: Release ${{ steps.build_date.outputs.action_build_date }}
+          tag_name: v0.1.${{ steps.build_date.outputs.action_build_date }}
+          release_name: Release v0.1.${{ steps.build_date.outputs.action_build_date }}
           draft: false
           prerelease: false
       - uses: actions/upload-release-asset@v1.0.1
