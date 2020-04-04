@@ -3,7 +3,7 @@ on:
   schedule:
     - cron:  '0 8 * * *'
 
-name: Release
+name: Test
 
 jobs:
   build:
