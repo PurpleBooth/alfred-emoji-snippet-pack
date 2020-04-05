@@ -11,7 +11,7 @@ Couple of things that are different though:
   - 🚀 Fully automated releases - As soon as [the place we get our Emoji's
     from](https://github.com/github/gemoji) updates, a new version will
     be built and released ✨automagically✨ 
-  - 🏳️‍⚧️ Contains Emoji 13.0 emojis
+  - 🏳️‍⚧️ Contains Emoji 13.0 emojis (Supported by twitter, but at time of writing not my mac 😬)
   - 🔁 No repeating emoji
   - 🗯️ More descriptive names
   - ⁉️ Prefix and suffix is done with configuration meaning it's easy to
