@@ -9,6 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y bats
       - uses: actions/checkout@master
         with:
           lfs: true

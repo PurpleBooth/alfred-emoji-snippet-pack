@@ -1,21 +1,71 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bats
 
-set -xeuo pipefail
+setup() {
+  rm -rf "$BATS_TEST_DIRNAME/../build/test"
+  mkdir -p "$BATS_TEST_DIRNAME/../build/test"
+}
 
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+@test "the icon was added to the pack" {
+  unzip -l "$BATS_TEST_DIRNAME/../build/Emoji.alfredsnippets" | grep --binary-files=text icon.png
+}
 
-rm -rf "$DIR/../build/test"
-mkdir -p "$DIR/../build/test"
-unzip -l "$DIR/../build/Emoji.alfredsnippets" | grep --binary-files=text icon.png
-unzip -l "$DIR/../build/Emoji.alfredsnippets" | grep --binary-files=text info.plist
-unzip -l "$DIR/../build/Emoji.alfredsnippets" | grep --binary-files=text -F json
-unzip "$DIR/../build/Emoji.alfredsnippets" -d build/test
+@test "the prefix suffix configuration was added to the pack" {
+  unzip -l "$BATS_TEST_DIRNAME/../build/Emoji.alfredsnippets" | grep --binary-files=text info.plist
+}
 
-# All files should be valid JSON
-for FILE in "$DIR/../build/test/"*.json; do
-	if [ -z "$FILE" ]; then
-		echo "$FILE"
-	fi
+@test "the snippet files names are suffixed with json" {
+  unzip -l "$BATS_TEST_DIRNAME/../build/Emoji.alfredsnippets" | grep --binary-files=text -F .json
+}
 
-	jq empty <"$FILE"
-done
+@test "the name contains the description, the emoji and the alias it has" {
+    unzip "$BATS_TEST_DIRNAME/../build/Emoji.alfredsnippets" -d build/test > /dev/null
+
+    OUT=$(cat "$BATS_TEST_DIRNAME/../build/test/slightly_smiling_face-"*.json | jq -r ".alfredsnippet.name")
+    [[ "$OUT" == "🙂 slightly smiling face \"slightly_smiling_face\"" ]]
+}
+
+@test "if the name has multiple aliases, put them both in" {
+    unzip "$BATS_TEST_DIRNAME/../build/Emoji.alfredsnippets" -d build/test > /dev/null
+
+    OUT=$(cat "$BATS_TEST_DIRNAME/../build/test/phone-"*.json | jq -r ".alfredsnippet.name")
+    [[ "$OUT" == "☎️ telephone \"phone\", \"telephone\"" ]]
+}
+
+@test "if the name has tags, put them both in in brackets" {
+    unzip "$BATS_TEST_DIRNAME/../build/Emoji.alfredsnippets" -d build/test > /dev/null
+
+    OUT=$(cat "$BATS_TEST_DIRNAME/../build/test/v-"*.json | jq -r ".alfredsnippet.name")
+    [[ "$OUT" == "✌️ victory hand \"v\" (victory, peace)" ]]
+}
+
+@test "they have a keyword" {
+    unzip "$BATS_TEST_DIRNAME/../build/Emoji.alfredsnippets" -d build/test > /dev/null
+
+    OUT=$(cat "$BATS_TEST_DIRNAME/../build/test/v-"*.json | jq -r ".alfredsnippet.keyword")
+    [[ "$OUT" == "v" ]]
+}
+
+@test "the snippet is the emoji" {
+    unzip "$BATS_TEST_DIRNAME/../build/Emoji.alfredsnippets" -d build/test > /dev/null
+
+    OUT=$(cat "$BATS_TEST_DIRNAME/../build/test/v-"*.json | jq -r ".alfredsnippet.snippet")
+    [[ "$OUT" == "✌️" ]]
+}
+
+@test "the uid is a uuid" {
+    unzip "$BATS_TEST_DIRNAME/../build/Emoji.alfredsnippets" -d build/test > /dev/null
+
+    OUT=$(cat "$BATS_TEST_DIRNAME/../build/test/v-"*.json | jq -r ".alfredsnippet.uid")
+    UUID_REGEX="^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+
+    [[ $OUT =~ $UUID_REGEX ]]
+}
+
+@test "the snippet files are valid json" {
+  unzip "$BATS_TEST_DIRNAME/../build/Emoji.alfredsnippets" -d build/test > /dev/null
+
+  for FILE in "$BATS_TEST_DIRNAME/../build/test/"*.json; do
+    run jq empty <"$FILE"
+    [ "$status" -eq 0 ]
+  done
+}
