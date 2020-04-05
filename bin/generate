@@ -14,7 +14,7 @@ Emoji.all.each do |emoji|
           snippet: emoji.raw,
           uid: SecureRandom.uuid,
           name: snippet_name,
-          keyword: ":#{emoji.name}:"
+          keyword: emoji.name
       }
   }
 

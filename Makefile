@@ -14,7 +14,7 @@ build/json:
 	bundle exec bin/generate
 
 build/Emoji.alfredsnippets: build/json
-	zip -r -j build/Emoji.alfredsnippets build/json/ icon.png
+	zip -r -j build/Emoji.alfredsnippets build/json/ icon.png info.plist
 
 .PHONY: build
 ## Build the Emoji Pack
