@@ -4,11 +4,13 @@
 
 Inspired by
 [califa/alfred-emoji-pack](https://github.com/califa/alfred-emoji-pack),
+which is worth a look.
 
 Couple of things that are different though:
 
-  - Fully automated releases - As soon as the place we get our Emoji's
-    from updates, a new version will be built
+  - Fully automated releases - As soon as [the place we get our Emoji's
+    from](https://github.com/github/gemoji) updates, a new version will
+    be built (When this was written that was Emoji 13.0)
   - Less repeating emoji
   - More descriptive names
 
