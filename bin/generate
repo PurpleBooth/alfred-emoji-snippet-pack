@@ -5,6 +5,31 @@ require 'securerandom'
 require 'json'
 require 'gemoji'
 
+Emoji.create('light_skin_tone') do |char|
+  char.add_unicode_alias '🏻'
+  char.description = 'Light Skin Tone'
+end
+
+Emoji.create('medium_light_skin_tone') do |char|
+  char.add_unicode_alias '🏼'
+  char.description = 'Medium-Light Skin Tone'
+end
+
+Emoji.create('medium_skin_tone') do |char|
+  char.add_unicode_alias '🏽'
+  char.description = 'Medium Skin Tone'
+end
+
+Emoji.create('medium_dark_skin_tone') do |char|
+  char.add_unicode_alias '🏾'
+  char.description = 'Medium-Dark Skin Tone'
+end
+
+Emoji.create('dark_skin_tone') do |char|
+  char.add_unicode_alias '🏿'
+  char.description = 'Dark Skin Tone'
+end
+
 Emoji.all.each do |emoji|
   snippet_name = "#{emoji.raw} "
   snippet_name += "#{emoji.description} "
