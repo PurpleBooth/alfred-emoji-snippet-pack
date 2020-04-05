@@ -20,11 +20,7 @@ great inspiration.
 
 ## Installing
 
-See [releases for
-downloads](https://github.com/PurpleBooth/emoji-pack-generator/releases).
-
-Download the latest one and run it. It'll open in Alfred and you can add
-it.
+Download the [latest release](https://github.com/PurpleBooth/alfred-emoji-snippet-pack/releases/latest) and run it. It'll open in Alfred.
 
 ## License
 
