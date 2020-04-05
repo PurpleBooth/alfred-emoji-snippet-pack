@@ -8,13 +8,13 @@ which is worth a look. 👀
 
 Couple of things that are different though:
 
-  - Fully automated releases - As soon as [the place we get our Emoji's
+  - 🚀 Fully automated releases - As soon as [the place we get our Emoji's
     from](https://github.com/github/gemoji) updates, a new version will
-    be built and released ✨automagically✨ (When this was written that
-    was Emoji 13.0)
-  - No 🔁repeating🔁 emoji
-  - More 🗣descriptive🗣 names
-  - Prefix and suffix is done with configuration meaning it's 😁easy😁 to
+    be built and released ✨automagically✨ 
+  - 🏳️‍⚧️ Contains Emoji 13.0 emojis
+  - 🔁 No repeating emoji
+  - 🗯️ More descriptive names
+  - ⁉️ Prefix and suffix is done with configuration meaning it's easy to
     change in Alfred
 
 Mostly these are just personal taste and the original project was a
