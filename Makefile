@@ -23,6 +23,7 @@ build: build/Emoji.alfredsnippets
 .PHONY: test
 ## Test it was built ok
 test: build/Emoji.alfredsnippets
+	bundle exec rubocop
 	bin/test
 
 .PHONY: clean

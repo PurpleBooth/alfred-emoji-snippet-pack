@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 require 'securerandom'
 require 'json'
 require 'gemoji'
@@ -6,17 +8,19 @@ require 'gemoji'
 Emoji.all.each do |emoji|
   snippet_name = "#{emoji.raw} "
   snippet_name += "#{emoji.description} "
-  snippet_name += emoji.aliases.map { |string| "\"#{string}\"" }.join(", ")
-  snippet_name += " (#{emoji.tags.join(", ")})" if emoji.tags.size > 0
+  snippet_name += emoji.aliases.map { |string| "\"#{string}\"" }.join(', ')
+  snippet_name += " (#{emoji.tags.join(', ')})" unless emoji.tags.empty?
 
   snippet = {
-      alfredsnippet: {
-          snippet: emoji.raw,
-          uid: SecureRandom.uuid,
-          name: snippet_name,
-          keyword: emoji.name
-      }
+    alfredsnippet: {
+      snippet: emoji.raw,
+      uid: SecureRandom.uuid,
+      name: snippet_name,
+      keyword: emoji.name
+    }
   }
 
-  File.write(File.join("build", "json", "#{emoji.name}-#{SecureRandom.uuid}.json"), JSON.generate(snippet))
+  json = JSON.generate(snippet)
+  filename = "#{emoji.name}-#{SecureRandom.uuid}.json"
+  File.write(File.join('build', 'json', filename), json)
 end
