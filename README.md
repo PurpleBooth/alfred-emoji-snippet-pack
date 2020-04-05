@@ -13,6 +13,7 @@ Couple of things that are different though:
     be built (When this was written that was Emoji 13.0)
   - Less repeating emoji
   - More descriptive names
+  - Prefix and suffix is done with configuration meaning it's easy to change in Alfred
 
 Mostly these are just personal taste and the original project was a
 great inspiration.
