@@ -14,7 +14,7 @@ jobs:
           timeout_minutes: 10
           max_attempts: 5
           command: sudo apt-get update && sudo apt-get install -y bats
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
         with:
           lfs: true
       - uses: masa-iwasaki/setup-rbenv@v1
@@ -23,7 +23,7 @@ jobs:
           rbenv install -s $(cat .ruby-version)
           bundle install --path vendor/bundle
           make clean build test
-      - uses: actions/upload-artifact@master
+      - uses: actions/upload-artifact@v2
         with:
           name: alfredsnippet-pack
           path: ./build/Emoji.alfredsnippets
@@ -33,9 +33,7 @@ jobs:
     steps:
       - run: echo ::set-output "name=action_build_date::$(date +%Y%m%d%H%M%S%N)"
         id: build_date
-      - uses: actions/download-artifact@master
-        with:
-          name: alfredsnippet-pack
+      - uses: actions/download-artifact@v2
       - id: create_release
         uses: actions/create-release@v1.0.0
         env:
