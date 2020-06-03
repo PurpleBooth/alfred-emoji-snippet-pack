@@ -36,7 +36,7 @@ jobs:
           token: '${{ secrets.COMMITTER_TOKEN }}'
       - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
       - id: get_previous_version
-        run: echo ::set-output name=PREVIOUS_VERSION::$(git describe --tags "$(git rev-list --tags --max-count=1)")
+        run: echo ::set-output name=PREVIOUS_VERSION::$(git tag --sort=-creatordate | head -n 1)
         shell: bash
       - id: semvers
         uses: WyriHaximus/github-action-next-semvers@master
