@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: nick-invision/retry@v1
+      - uses: nick-invision/retry@v1.0.1
         with:
           timeout_minutes: 10
           max_attempts: 5
