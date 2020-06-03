@@ -28,16 +28,17 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
-      - run: echo ::set-output "name=action_build_date::$(date +%Y%m%d%H%M%S%N)"
-        id: build_date
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
       - uses: actions/download-artifact@v2
       - id: create_release
         uses: actions/create-release@v1.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v0.1.${{ steps.build_date.outputs.action_build_date }}
-          release_name: Release v0.1.${{ steps.build_date.outputs.action_build_date }}
+          tag_name: ${{ steps.get_version.outputs.VERSION }}
+          release_name: Release ${{ steps.get_version.outputs.VERSION }}
           draft: false
           prerelease: false
       - uses: actions/upload-release-asset@v1.0.2
