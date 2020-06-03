@@ -43,7 +43,7 @@ jobs:
           release_name: Release v0.1.${{ steps.build_date.outputs.action_build_date }}
           draft: false
           prerelease: false
-      - uses: actions/upload-release-asset@v1.0.1
+      - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
