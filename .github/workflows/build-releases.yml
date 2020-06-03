@@ -1,22 +1,19 @@
-on:
+'on':
   push:
-    branches:
-      - master
-
-name: Release
-
+    tags:
+      - '*'
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
       - uses: nick-invision/retry@v1.0.1
         with:
           timeout_minutes: 10
           max_attempts: 5
           command: sudo apt-get update && sudo apt-get install -y bats
-      - uses: actions/checkout@v2
-        with:
-          lfs: true
       - uses: masa-iwasaki/setup-rbenv@1.2.0
       - run: |
           eval "$(rbenv init -)"
