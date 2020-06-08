@@ -68,6 +68,7 @@ jobs:
         run: |
           git add .
           git stash
+          git rebase origin/master
           git checkout master
           git merge --ff-only -
           git stash pop
