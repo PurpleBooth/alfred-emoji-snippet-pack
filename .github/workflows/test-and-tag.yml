@@ -48,7 +48,7 @@ jobs:
         run: echo "$VERSION" >./version/version
         env:
           VERSION: ${{ steps.semvers.outputs.v_minor }}
-      - if: "contains(github.event.head_commit.message, 'Signed-off-by: dependabot-preview[bot] <support@dependabot.com>')"
+      - if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]'
         run: echo "$VERSION" >./version/version
         env:
           VERSION: ${{ steps.semvers.outputs.v_patch }}
