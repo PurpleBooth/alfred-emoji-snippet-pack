@@ -18,7 +18,8 @@ jobs:
       - run: |
           eval "$(rbenv init -)"
           rbenv install -s $(cat .ruby-version)
-          bundle install --path vendor/bundle
+          bundle config set path 'vendor/bundle'
+          bundle install
           make clean build test
       - uses: actions/upload-artifact@v2
         with:
