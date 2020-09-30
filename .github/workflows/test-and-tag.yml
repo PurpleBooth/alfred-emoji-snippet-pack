@@ -7,7 +7,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: nick-invision/retry@v1.0.4
+    - uses: nick-invision/retry@v2
       with:
         timeout_minutes: 10
         max_attempts: 5
