@@ -14,7 +14,7 @@ jobs:
           timeout_minutes: 10
           max_attempts: 5
           command: sudo apt-get update && sudo apt-get install -y bats
-      - uses: masa-iwasaki/setup-rbenv@1.2.0
+      - uses: ruby/setup-ruby@v1
       - run: |
           eval "$(rbenv init -)"
           rbenv install -s $(cat .ruby-version)
