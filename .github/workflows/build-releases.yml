@@ -16,8 +16,6 @@ jobs:
           command: sudo apt-get update && sudo apt-get install -y bats
       - uses: ruby/setup-ruby@v1
       - run: |
-          eval "$(rbenv init -)"
-          rbenv install -s $(cat .ruby-version)
           bundle config set path 'vendor/bundle'
           bundle install
           make clean build test
