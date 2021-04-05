@@ -1,7 +1,8 @@
-'on':
+name: Build GitHub Releases
+"on":
   push:
-    tags:
-      - '*'
+    tags-ignore:
+      - "versio-prev"
 jobs:
   build:
     runs-on: ubuntu-latest

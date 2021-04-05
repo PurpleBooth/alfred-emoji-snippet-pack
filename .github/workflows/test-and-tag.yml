@@ -1,9 +1,25 @@
----
-'on':
+name: Test and Tag
+"on":
   push:
     branches:
-      - 'main'
+      - "main"
 jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 0
+      - uses: chaaz/versio-actions/install@v1.1
+        name: Install versio
+      - name: Check projects
+        run: versio check
+      - name: Print changes
+        run: versio plan
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USER: ${{ github.actor }}
   test:
     runs-on: ubuntu-latest
     steps:
@@ -28,41 +44,17 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'Release v')"
     needs:
       - test
+      - version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.3.4
         with:
           token: '${{ secrets.COMMITTER_TOKEN }}'
           fetch-depth: 0  
-      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-      - id: get_previous_version
-        run: echo ::set-output name=PREVIOUS_VERSION::$(git tag --sort=-creatordate | head -n 1)
-        shell: bash
-      - id: semvers
-        uses: WyriHaximus/github-action-next-semvers@master
-        with:
-          version: '${{ steps.get_previous_version.outputs.PREVIOUS_VERSION }}'
-      - run: mkdir -p ./version
-      - if: "!contains(github.event.head_commit.message, 'BC BREAK') && !contains(github.event.head_commit.message, 'Signed-off-by: dependabot-preview[bot] <support@dependabot.com>')"
-        run: echo "$VERSION" >./version/version
+      - uses: chaaz/versio-actions/install@v1.1
+        name: Install versio
+      - name: Generate release
+        run: versio release
         env:
-          VERSION: ${{ steps.semvers.outputs.v_minor }}
-      - if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]'
-        run: echo "$VERSION" >./version/version
-        env:
-          VERSION: ${{ steps.semvers.outputs.v_patch }}
-      - run: echo "$VERSION" > ./version/version
-        env:
-          VERSION: ${{ steps.semvers.outputs.v_major }}
-        if: "contains(github.event.head_commit.message, 'BC BREAK')"
-      - shell: bash
-        run: |
-          git config user.name "GitHub"
-          git config user.email "noreply@github.com"
-
-          git fetch
-      - shell: bash
-        run: |
-          git tag -a -m "Release $(cat ./version/version)" "$(cat ./version/version)"
-          git push
-          git push --tags
+          GITHUB_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
+          GITHUB_USER: ${{ github.actor }}

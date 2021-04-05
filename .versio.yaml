@@ -1,0 +1,18 @@
+options:
+  prev_tag: versio-prev
+
+projects:
+- name: alfred-emoji-snippet-pack
+  id: 1
+  tag_prefix: ''
+  labels: tag
+  version:
+    tags:
+      default: 0.1.0
+
+sizes:
+  major: ['!']
+  minor: [feat]
+  patch: [fix, docs, style, refactor, perf, test, chore, build, ci]
+  none: []
+  fail: ['*']

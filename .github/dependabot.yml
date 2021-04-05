@@ -1,15 +1,19 @@
 version: 2
 updates:
 - package-ecosystem: bundler
-  directory: "/"
+  directory: /
   schedule:
     interval: daily
   open-pull-requests-limit: 10
+  commit-message:
+    prefix: fix
   allow:
   - dependency-type: direct
   - dependency-type: indirect
 - package-ecosystem: github-actions
-  directory: "/"
+  directory: /
   schedule:
     interval: daily
   open-pull-requests-limit: 10
+  commit-message:
+    prefix: fix

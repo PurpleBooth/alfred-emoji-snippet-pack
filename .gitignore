@@ -2,3 +2,4 @@ build
 vendor
 .bundle
 /version/version
+/.versio-paused
