@@ -1,25 +1,25 @@
 name: Test and Tag
-"on":
+on:
   push:
     branches:
-      - "main"
+    - main
 jobs:
   version:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2.3.4
-        with:
-          fetch-depth: 0
-      - uses: chaaz/versio-actions/install@v1.1
-        name: Install versio
-      - name: Check projects
-        run: versio check
-      - name: Print changes
-        run: versio plan
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_USER: ${{ github.actor }}
+    - name: Checkout code
+      uses: actions/checkout@v2.3.4
+      with:
+        fetch-depth: 0
+    - uses: chaaz/versio-actions/install@v1.1
+      name: Install versio
+    - name: Check projects
+      run: versio check
+    - name: Print changes
+      run: versio plan
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_USER: ${{ github.actor }}
   test:
     runs-on: ubuntu-latest
     steps:
@@ -43,18 +43,18 @@ jobs:
   merge-and-push:
     if: "!contains(github.event.head_commit.message, 'Release v')"
     needs:
-      - test
-      - version
+    - test
+    - version
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.4
-        with:
-          token: '${{ secrets.COMMITTER_TOKEN }}'
-          fetch-depth: 0  
-      - uses: chaaz/versio-actions/install@v1.1
-        name: Install versio
-      - name: Generate release
-        run: versio release
-        env:
-          GITHUB_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
-          GITHUB_USER: ${{ github.actor }}
+    - uses: actions/checkout@v2.3.4
+      with:
+        token: ${{ secrets.COMMITTER_TOKEN }}
+        fetch-depth: 0
+    - uses: chaaz/versio-actions/install@v1.1
+      name: Install versio
+    - name: Generate release
+      run: versio release
+      env:
+        GITHUB_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
+        GITHUB_USER: ${{ github.actor }}
