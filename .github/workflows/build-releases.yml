@@ -28,19 +28,30 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     steps:
+      - id: get_previous_version
+        name: Get the previous version
+        run: echo ::set-output name=PREVIOUS_VERSION::$(git tag | sort --version-sort | tail -n 3 | head -n 1)
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
       - uses: actions/download-artifact@v2
-      - id: create_release
-        uses: actions/create-release@v1.1.4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: dlavrenuek/conventional-changelog-action@v1.1.1
+        name: Generate change log
+        id: changelog
         with:
-          tag_name: ${{ steps.get_version.outputs.VERSION }}
-          release_name: Release ${{ steps.get_version.outputs.VERSION }}
+          from: ${{ steps.get_previous_version.outputs.PREVIOUS_VERSION }}
+          to: ${{ steps.get_version.outputs.VERSION }}
+      - env:
+          GITHUB_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
+        id: create_release
+        name: Create GitHub Release
+        uses: actions/create-release@v1.1.4
+        with:
           draft: false
           prerelease: false
+          body: ${{ steps.changelog.outputs.body }}
+          release_name: Release ${{ steps.get_version.outputs.VERSION }}
+          tag_name: ${{ steps.get_version.outputs.VERSION }}
       - uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
