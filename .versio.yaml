@@ -11,8 +11,5 @@ projects:
       default: 0.1.0
 
 sizes:
-  major: ['!']
-  minor: [feat]
-  patch: [fix, docs, style, refactor, perf, test, chore, build, ci]
-  none: []
-  fail: ['*']
+  use_angular: true
+  none: [ci]
