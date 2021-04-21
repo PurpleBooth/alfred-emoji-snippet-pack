@@ -12,4 +12,5 @@ projects:
 
 sizes:
   use_angular: true
+  patch: ["-"]
   none: [ci]
