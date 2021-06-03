@@ -1,9 +1,23 @@
+queue_rules:
+- name: default
+  conditions:
+  - status-success=test
+
 pull_request_rules:
+- name: request review on external contributor
+  conditions:
+  - -author=PurpleBooth
+  actions:
+    request_reviews:
+      users:
+      - PurpleBooth
+
 - name: automatic merge for Dependabot pull requests
   conditions:
   - author~=^dependabot(|-preview)\[bot\]$
   - status-success=test
   actions:
-    merge:
-      method: merge
-      strict: smart+fasttrack
+    queue:
+      method: rebase
+      rebase_fallback: merge
+      name: default
