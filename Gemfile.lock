@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.2)
-    gemoji (4.0.0.rc2)
+    gemoji (4.0.0.rc3)
     parallel (1.20.1)
     parser (3.0.2.0)
       ast (~> 2.4.1)
@@ -27,7 +27,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  gemoji (= 4.0.0.rc2)
+  gemoji (= 4.0.0.rc3)
   rubocop
 
 BUNDLED WITH
