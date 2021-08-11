@@ -1,0 +1,138 @@
+name: Pipeline
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+jobs:
+  versio-plan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 0
+      - uses: chaaz/versio-actions/install@v1.1
+        name: Install versio
+      - name: Check projects
+        run: versio check
+      - name: Print changes
+        run: versio plan
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USER: ${{ github.actor }}
+      - name: version bump details
+        run: versio release --dry-run
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USER: ${{ github.actor }}
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: nick-invision/retry@v2.4.1
+        with:
+          timeout_minutes: 10
+          max_attempts: 5
+          command: sudo apt-get update && sudo apt-get install -y bats
+      - uses: actions/checkout@v2.3.4
+        with:
+          lfs: true
+      - uses: ruby/setup-ruby@v1
+      - run: |
+          bundle config set path 'vendor/bundle'
+          bundle install
+          make clean build test
+      - uses: actions/upload-artifact@v2
+        with:
+          name: alfredsnippet-pack
+          path: ./build/Emoji.alfredsnippets
+  release:
+    if: github.ref == 'refs/heads/master'
+    needs:
+      - versio-plan
+      - test
+    outputs:
+      version_bump: ${{ steps.version_bump.outputs.version_bump }}
+      current_version: ${{ steps.current_version.outputs.current_version }}
+      previous_version: ${{ steps.previous_version.outputs.previous_version }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      - uses: chaaz/versio-actions/install@v1.1
+        name: Install versio
+      - id: previous_version
+        run: echo ::set-output "name=previous_version::$( versio get --id 1 -v )"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USER: ${{ github.actor }}
+      - run: echo ::set-output "name=BUMP::$( versio release --dry-run )"
+        id: get_versio_plan
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USER: ${{ github.actor }}
+
+      - name: Generate release
+        if: ${{ contains(steps.get_versio_plan.outputs.BUMP, ' -> ') }}
+        run: |
+          versio release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USER: ${{ github.actor }}
+          RUST_LOG: versio=trace
+          RUST_BACKTRACE: 1
+      - run: echo ::set-output "name=current_version::$( versio get --id 1 -v )"
+        id: current_version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USER: ${{ github.actor }}
+      - run: echo ::set-output "name=version_bump::true"
+        if: steps.current_version.outputs.current_version != steps.previous_version.outputs.previous_version
+        id: version_bump
+
+  upload-release:
+    needs:
+      - build-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+        name: Checkout the repository
+        with:
+          lfs: true
+          fetch-depth: 0
+      - id: get_previous_version
+        name: Get the previous version
+        run: echo ::set-output name=PREVIOUS_VERSION::$(git tag | sort --version-sort
+          | tail -n 3 | head -n 1)
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+      - uses: actions/download-artifact@v2
+      - uses: dlavrenuek/conventional-changelog-action@v1.1.2
+        name: Generate change log
+        id: changelog
+        with:
+          from: ${{ steps.get_previous_version.outputs.PREVIOUS_VERSION }}
+          to: ${{ steps.get_version.outputs.VERSION }}
+      - env:
+          GITHUB_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
+        id: create_release
+        name: Create GitHub Release
+        uses: actions/create-release@v1.1.4
+        with:
+          draft: false
+          prerelease: false
+          body: ${{ steps.changelog.outputs.body }}
+          release_name: Release ${{ steps.get_version.outputs.VERSION }}
+          tag_name: ${{ steps.get_version.outputs.VERSION }}
+      - uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./alfredsnippet-pack/Emoji.alfredsnippets
+          asset_name: Emoji.alfredsnippets
+          asset_content_type: application/zip
