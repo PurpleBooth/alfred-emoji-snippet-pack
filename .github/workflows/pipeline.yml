@@ -106,28 +106,30 @@ jobs:
           lfs: true
           fetch-depth: 0
       - uses: actions/download-artifact@v2
-      - uses: dlavrenuek/conventional-changelog-action@v1.1.2
-        name: Generate change log
-        id: changelog
+      - uses: actions-rs/toolchain@v1.0.7
+        name: Install rust toolchain
         with:
-          from: v${{ needs.release.outputs.previous_version }}
-          to: v${{ needs.release.outputs.current_version }}
-      - env:
-          GITHUB_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
-        id: create_release
-        name: Create GitHub Release
-        uses: actions/create-release@v1.1.4
-        with:
-          draft: false
-          prerelease: false
-          body: ${{ steps.changelog.outputs.body }}
-          release_name: Release v${{ needs.release.outputs.current_version }}
-          tag_name: ${{ needs.release.outputs.current_version }}
-      - uses: actions/upload-release-asset@v1.0.2
+          default: true
+          profile: minimal
+          toolchain: stable
+      - id: get_repository_name
+        name: Calculate repository name
+        run: echo ::set-output name=REPOSITORY_NAME::$(echo "$GITHUB_REPOSITORY" | awk
+          -F / '{print $2}' | sed -e "s/:refs//")
+        shell: bash
+      - run: cargo install git-cz
+      - run: git cz changelog "$FROM..$TO" > CHANGELOG.md
         env:
+          FROM: v${{ needs.release.outputs.previous_version }}
+          TO: v${{ needs.release.outputs.current_version }}
+      - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: create_release
+        uses: ncipollo/release-action@v1.8.8
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./alfredsnippet-pack/Emoji.alfredsnippets
-          asset_name: Emoji.alfredsnippets
-          asset_content_type: application/zip
+          allowUpdates: true
+          token: ${{ secrets.COMMITTER_TOKEN }}
+          bodyFile: "CHANGELOG.md"
+          name: Release v${{ needs.release.outputs.current_version }}
+          tag: v${{ needs.release.outputs.current_version }}
+          artifacts: ./alfredsnippet-pack/Emoji.alfredsnippets
