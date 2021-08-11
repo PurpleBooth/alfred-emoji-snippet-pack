@@ -96,6 +96,7 @@ jobs:
         id: version_bump
 
   upload-release:
+    if: needs.release.outputs.version_bump
     needs:
       - release
     runs-on: ubuntu-latest
@@ -113,11 +114,11 @@ jobs:
           default: true
           profile: minimal
           toolchain: stable
-      - name: "Build Changelog"
-        id: build_changelog
-        uses: mikepenz/release-changelog-builder-action@v2.1.1
+      - run: cargo install git-cz
+      - run: git cz changelog "$FROM..$TO" > CHANGELOG.md
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FROM: v${{ needs.release.outputs.previous_version }}
+          TO: v${{ needs.release.outputs.current_version }}
       - uses: actions/download-artifact@v2
         name: Download package to be released
       - env:
