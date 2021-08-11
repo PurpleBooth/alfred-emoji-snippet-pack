@@ -108,8 +108,8 @@ jobs:
         name: Generate change log
         id: changelog
         with:
-          from: ${{ needs.release.outputs.previous_version }}
-          to: ${{ needs.release.outputs.current_version }}
+          from: v${{ needs.release.outputs.previous_version }}
+          to: v${{ needs.release.outputs.current_version }}
       - env:
           GITHUB_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
         id: create_release
