@@ -48,7 +48,7 @@ jobs:
           name: alfredsnippet-pack
           path: ./build/Emoji.alfredsnippets
   release:
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     needs:
       - versio-plan
       - test
