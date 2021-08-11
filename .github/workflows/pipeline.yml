@@ -105,7 +105,10 @@ jobs:
         with:
           lfs: true
           fetch-depth: 0
+      - uses: chaaz/versio-actions/install@v1.1
+        name: Install versio
       - uses: actions/download-artifact@v2
+        name: Download package to be released
       - uses: actions-rs/toolchain@v1.0.7
         name: Install rust toolchain
         with:
@@ -118,10 +121,7 @@ jobs:
           -F / '{print $2}' | sed -e "s/:refs//")
         shell: bash
       - run: cargo install git-cz
-      - run: git cz changelog "$FROM..$TO" > CHANGELOG.md
-        env:
-          FROM: v${{ needs.release.outputs.previous_version }}
-          TO: v${{ needs.release.outputs.current_version }}
+      - run: git cz changelog "v$(versio get -i 1 -p -v)..v$(versio get -i 1 -v)" > CHANGELOG.md
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: create_release
