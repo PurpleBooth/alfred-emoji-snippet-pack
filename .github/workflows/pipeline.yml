@@ -113,8 +113,11 @@ jobs:
           default: true
           profile: minimal
           toolchain: stable
-      - run: cargo install git-cz
-      - run: git cz changelog "v$(versio get -i 1 -p -v)..v$(versio get -i 1 -v)" > CHANGELOG.md
+      - name: "Build Changelog"
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@v2.1.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/download-artifact@v2
         name: Download package to be released
       - env:
@@ -124,7 +127,7 @@ jobs:
         with:
           allowUpdates: true
           token: ${{ secrets.COMMITTER_TOKEN }}
-          bodyFile: "CHANGELOG.md"
+          body: ${{steps.build_changelog.outputs.changelog}}
           name: Release v${{ needs.release.outputs.current_version }}
           tag: v${{ needs.release.outputs.current_version }}
           artifacts: ./alfredsnippet-pack/Emoji.alfredsnippets
