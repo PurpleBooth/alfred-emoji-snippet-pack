@@ -110,7 +110,7 @@ jobs:
         uses: orhun/git-cliff-action@v1
         with:
           config: cliff.toml
-          args: --verbose
+          args: --verbose --latest
         env:
           OUTPUT: CHANGELOG.md
       - uses: actions/download-artifact@v2

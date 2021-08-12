@@ -1,5 +1,6 @@
 [changelog]
-header = "# Changelog"
+header = """# Changelog
+"""
 body = """
 {% if version %}\
     ## [{{ version | replace(from="v", to="") }}] - {{ timestamp | date(format="%Y-%m-%d") }}
