@@ -121,6 +121,9 @@ jobs:
           TO: v${{ needs.release.outputs.current_version }}
       - uses: actions/download-artifact@v2
         name: Download package to be released
+      - name: Generate Hashes
+        run: sha256sum Emoji.alfredsnippets > SHA256SUMS
+        working-directory: alfredsnippet-pack
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: create_release
@@ -131,4 +134,4 @@ jobs:
           body: ${{steps.build_changelog.outputs.changelog}}
           name: Release v${{ needs.release.outputs.current_version }}
           tag: v${{ needs.release.outputs.current_version }}
-          artifacts: ./alfredsnippet-pack/Emoji.alfredsnippets
+          artifacts: "./alfredsnippet-pack/Emoji.alfredsnippets*,SHA256SUMS"
