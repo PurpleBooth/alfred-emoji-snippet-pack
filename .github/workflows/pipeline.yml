@@ -106,19 +106,13 @@ jobs:
         with:
           lfs: true
           fetch-depth: 0
-      - uses: chaaz/versio-actions/install@v1.1
-        name: Install versio
-      - uses: actions-rs/toolchain@v1.0.7
-        name: Install rust toolchain
+      - name: Generate a changelog
+        uses: orhun/git-cliff-action@v1
         with:
-          default: true
-          profile: minimal
-          toolchain: stable
-      - run: cargo install git-cz
-      - run: git cz changelog "$FROM..$TO" > CHANGELOG.md
+          config: cliff.toml
+          args: --verbose
         env:
-          FROM: v${{ needs.release.outputs.previous_version }}
-          TO: v${{ needs.release.outputs.current_version }}
+          OUTPUT: CHANGELOG.md
       - uses: actions/download-artifact@v2
         name: Download package to be released
       - name: Generate Hashes
@@ -131,7 +125,7 @@ jobs:
         with:
           allowUpdates: true
           token: ${{ secrets.COMMITTER_TOKEN }}
-          body: ${{steps.build_changelog.outputs.changelog}}
+          bodyFile: "CHANGELOG.md"
           name: Release v${{ needs.release.outputs.current_version }}
           tag: v${{ needs.release.outputs.current_version }}
           artifacts: "./alfredsnippet-pack/Emoji.alfredsnippets*,SHA256SUMS"
