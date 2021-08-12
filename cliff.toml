@@ -24,3 +24,4 @@ trim = true
 
 [git]
 conventional_commits = true
+tag_pattern = "v[0-9]*"
