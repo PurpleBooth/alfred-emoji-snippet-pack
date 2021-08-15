@@ -4,9 +4,9 @@ header = """## Changelog
 body = """
 {% if version %}\
     {% if previous %}\
-        ### [{{ version }}](https://github.com/PurpleBooth/git-mit/compare/{{ previous.version }}...{{ version }}) ({{ timestamp | date(format="%Y-%m-%d") }})
+        ### [{{ version }}](https://github.com/PurpleBooth/alfred-emoji-snippet-pack/compare/{{ previous.version }}...{{ version }}) ({{ timestamp | date(format="%Y-%m-%d") }})
     {% else %}\
-        ### [{{ version }}](https://github.com/PurpleBooth/git-mit/tree/{{ version }}) ({{ timestamp | date(format="%Y-%m-%d") }})
+        ### [{{ version }}](https://github.com/PurpleBooth/alfred-emoji-snippet-pack/tree/{{ version }}) ({{ timestamp | date(format="%Y-%m-%d") }})
     {% endif %}\
 {% else %}\
     ### [unreleased]
