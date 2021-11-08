@@ -39,7 +39,7 @@ jobs:
         with:
           lfs: true
       - uses: ruby/setup-ruby@v1
-      - uses: PurpleBooth/gfmfmt-action@v2.0.1
+      - uses: PurpleBooth/gfmfmt-action@v2.0.2
         name: Check markdown is well formatted
       - run: |
           bundle config set path 'vendor/bundle'
