@@ -8,6 +8,7 @@ updates:
   commit-message:
     prefix: fix
     prefix-development: build
+    include: "scope"
   allow:
   - dependency-type: direct
   - dependency-type: indirect
