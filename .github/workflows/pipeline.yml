@@ -45,7 +45,7 @@ jobs:
           bundle config set path 'vendor/bundle'
           bundle install
           make clean build test
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: alfredsnippet-pack
           path: ./build/Emoji.alfredsnippets
