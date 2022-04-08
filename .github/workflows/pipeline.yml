@@ -113,7 +113,7 @@ jobs:
           args: --verbose --latest
         env:
           OUTPUT: CHANGELOG.md
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         name: Download package to be released
       - name: Generate Hashes
         run: sha256sum Emoji.alfredsnippets > SHA256SUMS
