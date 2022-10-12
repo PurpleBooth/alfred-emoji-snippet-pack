@@ -75,11 +75,11 @@ jobs:
           sudo apt-get install -y libgpgme11-dev
           cargo install versio
       - id: previous_version
-        run: echo ::set-output "name=previous_version::$( versio get --id 1 -v )"
+        run: echo "previous_version=$( versio get --id 1 -v )" >> "$GITHUB_OUTPUT"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_USER: ${{ github.actor }}
-      - run: echo ::set-output "name=BUMP::$( versio release --dry-run )"
+      - run: echo "BUMP=$( versio release --dry-run )" >> "$GITHUB_OUTPUT"
         id: get_versio_plan
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -94,12 +94,12 @@ jobs:
           GITHUB_USER: ${{ github.actor }}
           RUST_LOG: versio=trace
           RUST_BACKTRACE: 1
-      - run: echo ::set-output "name=current_version::$( versio get --id 1 -v )"
+      - run: echo "current_version=$( versio get --id 1 -v )" >> "$GITHUB_OUTPUT"
         id: current_version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_USER: ${{ github.actor }}
-      - run: echo ::set-output "name=version_bump::true"
+      - run: echo "version_bump=true" >> "$GITHUB_OUTPUT"
         if: steps.current_version.outputs.current_version != steps.previous_version.outputs.previous_version
         id: version_bump
 
