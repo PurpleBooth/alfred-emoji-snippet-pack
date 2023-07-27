@@ -9,7 +9,7 @@ GEM
       ast (~> 2.4.1)
     rainbow (3.1.1)
     regexp_parser (2.7.0)
-    rexml (3.2.5)
+    rexml (3.2.6)
     rubocop (1.48.1)
       json (~> 2.3)
       parallel (~> 1.10)
