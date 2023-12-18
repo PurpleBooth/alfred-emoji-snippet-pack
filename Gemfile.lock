@@ -4,7 +4,7 @@ GEM
     ast (2.4.2)
     gemoji (4.0.1)
     json (2.6.3)
-    parallel (1.22.1)
+    parallel (1.24.0)
     parser (3.2.1.1)
       ast (~> 2.4.1)
     rainbow (3.1.1)
